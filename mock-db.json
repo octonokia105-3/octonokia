@@ -1,0 +1,16 @@
+[
+  {
+    "id": 8900,
+    "display_id": "DEV-8900",
+    "created_at": "2026-07-12T00:36:51.618Z",
+    "total_amount": 399,
+    "status": "new",
+    "duplicate_flag": false,
+    "customers": {
+      "full_name": "hamza",
+      "phone": "0663409272",
+      "city": "الدار البيضاء",
+      "address": "hazazaaza"
+    }
+  }
+]
