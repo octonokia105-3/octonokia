@@ -8,19 +8,19 @@ export default function TechnicalSpecs() {
   const nokiaSpecs = [
     { label: "نوع الشاشة", val: "1.8 بوصة QQVGA", icon: Smartphone },
     { label: "البطارية", val: "800 مللي أمبير", icon: Battery },
-    { label: "وقت الانتظار", val: "حتى 25 يوماً", icon: Zap },
-    { label: "وقت التحدث", val: "حتى 14 ساعة", icon: Zap },
+    { label: "الانتظار", val: "حتى 25 يوماً", icon: Zap },
+    { label: "التحدث", val: "حتى 14 ساعة", icon: Zap },
     { label: "الشبكة", val: "2G Dual SIM", icon: Signal },
     { label: "الوزن", val: "73 جرام", icon: Weight }
   ];
 
   const m10Specs = [
-    { label: "إصدار البلوتوث", val: "V5.1", icon: Signal },
-    { label: "مسافة الاتصال", val: "10 أمتار", icon: Zap },
-    { label: "وقت التشغيل", val: "4-5 ساعات للمرة", icon: Headphones },
-    { label: "بطارية العلبة", val: "2000 مللي أمبير (باوربانك)", icon: Battery },
-    { label: "مقاومة الماء", val: "IPX7", icon: Droplets },
-    { label: "الميكروفون", val: "مدمج مع عزل CVC 8.0", icon: Mic }
+    { label: "البلوتوث", val: "V5.1", icon: Signal },
+    { label: "المسافة", val: "10 أمتار", icon: Zap },
+    { label: "التشغيل", val: "4-5 ساعات", icon: Headphones },
+    { label: "العلبة", val: "2000 مللي أمبير", icon: Battery },
+    { label: "الماء", val: "IPX7", icon: Droplets },
+    { label: "المايك", val: "عزل CVC 8.0", icon: Mic }
   ];
 
   return (
@@ -37,12 +37,12 @@ export default function TechnicalSpecs() {
         </div>
 
         {/* Nokia Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative aspect-square rounded-[2rem] bg-void border border-border flex items-center justify-center overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "0px" }}
+            className="relative aspect-square rounded-[2rem] bg-gradient-to-tr from-void to-surface border border-border flex items-center justify-center overflow-hidden shadow-2xl"
           >
             <div className="absolute inset-0 bg-gold/5 blur-[50px] rounded-full" />
             <div className="w-[85%] h-[85%] relative">
@@ -50,63 +50,61 @@ export default function TechnicalSpecs() {
                 src="/images/nokia/nokia-105-user.png" 
                 alt="Nokia Specs"
                 fill
-                className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 rounded-2xl"
+                className="object-contain drop-shadow-[0_20px_40px_rgba(232,184,58,0.15)] hover:scale-105 transition-transform duration-700"
               />
             </div>
           </motion.div>
 
           <div className="space-y-8">
-            <h3 className="text-3xl font-black text-light text-gold-shine border-b border-border pb-4">
+            <h3 className="text-3xl md:text-4xl font-black text-light text-gold-shine border-b border-border pb-4">
               نوكيا 105 الأصلي
             </h3>
             
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {nokiaSpecs.map((s, i) => (
-                <motion.div 
+                <div 
                   key={i} 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex justify-between items-center p-3 bg-void border border-border rounded-lg"
+                  className="flex flex-col items-center justify-center text-center p-4 bg-void/50 border border-border rounded-2xl hover:border-gold/30 hover:bg-gold/5 transition-all duration-300 group"
                 >
-                  <span className="text-muted text-sm font-bold flex items-center gap-2"><s.icon className="w-4 h-4 text-gold" /> {s.label}</span>
+                  <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-3 group-hover:scale-110 transition-transform">
+                    <s.icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-muted text-xs font-bold mb-1">{s.label}</span>
                   <span className="text-light text-sm font-black">{s.val}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
         </div>
 
         {/* M10 Earbuds Section */}
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 order-2 md:order-1">
-            <h3 className="text-3xl font-black text-light text-gold-shine border-b border-border pb-4">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8 order-2 lg:order-1">
+            <h3 className="text-3xl md:text-4xl font-black text-light text-gold-shine border-b border-border pb-4">
               سماعات M10 Pro اللاسلكية
             </h3>
             
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {m10Specs.map((s, i) => (
-                <motion.div 
+                <div 
                   key={i} 
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex justify-between items-center p-3 bg-void border border-border rounded-lg"
+                  className="flex flex-col items-center justify-center text-center p-4 bg-void/50 border border-border rounded-2xl hover:border-gold/30 hover:bg-gold/5 transition-all duration-300 group"
                 >
-                  <span className="text-muted text-sm font-bold flex items-center gap-2"><s.icon className="w-4 h-4 text-gold" /> {s.label}</span>
+                  <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold mb-3 group-hover:scale-110 transition-transform">
+                    <s.icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-muted text-xs font-bold mb-1">{s.label}</span>
                   <span className="text-light text-sm font-black">{s.val}</span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
 
           <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative aspect-square rounded-[2rem] bg-void border border-border flex items-center justify-center overflow-hidden order-1 md:order-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "0px" }}
+            className="relative aspect-square rounded-[2rem] bg-gradient-to-tr from-void to-surface border border-border flex items-center justify-center overflow-hidden order-1 lg:order-2 shadow-2xl"
           >
             <div className="absolute inset-0 bg-gold/5 blur-[50px] rounded-full" />
             <div className="w-[85%] h-[85%] relative">
@@ -114,7 +112,7 @@ export default function TechnicalSpecs() {
                 src="/images/nokia/m10-earbuds-user.png" 
                 alt="M10 Earbuds Specs"
                 fill
-                className="object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 rounded-2xl"
+                className="object-contain drop-shadow-[0_20px_40px_rgba(232,184,58,0.15)] hover:scale-105 transition-transform duration-700"
               />
             </div>
           </motion.div>

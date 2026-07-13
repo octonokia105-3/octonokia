@@ -30,18 +30,21 @@ export default function Home() {
       <main>
         <HeroSlideshow />
         <SocialProofMarquee />
+        <UrgencySection />
         
-        {/* Top Checkout Section */}
-        <div id="checkout-top" className="scroll-mt-24">
+        {/* Desire & Proof Phase */}
+        <DetailedFeatures />
+        <TechnicalSpecs />
+        
+        {/* Mid-Page Checkout (Strike while iron is hot) */}
+        <div id="checkout-top" className="scroll-mt-24 py-12 bg-surface">
           <CheckoutForm />
         </div>
 
-        <UrgencySection />
-        <DetailedFeatures />
-        <TechnicalSpecs />
+        {/* Risk Reversal & Social Proof Phase */}
         <HowItWorks />
-        <TestimonialsGrid />
         <TrustGuarantees />
+        <TestimonialsGrid />
         <FAQAccordion />
         
         {/* Bottom Checkout Section with extra Marquee */}

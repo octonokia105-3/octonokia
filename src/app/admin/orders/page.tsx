@@ -63,5 +63,5 @@ export default async function AdminOrdersPage(props: {
 
   const { data: orders } = await query
 
-  return <OrdersClient orders={orders} searchParams={searchParams} />
+  return <OrdersClient orders={orders || []} searchParams={searchParams} />
 }

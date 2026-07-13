@@ -13,7 +13,7 @@ export async function submitOrder(prevState: any, formData: FormData) {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.warn("⚠️ DEV MODE: No Supabase keys found. Saving to local mock database for preview.")
       
-      const mockDbPath = path.join(process.cwd(), 'mock-db.json')
+      const mockDbPath = process.env.VERCEL ? '/tmp/mock-db.json' : path.join(process.cwd(), 'mock-db.json')
       let mockOrders: any[] = []
       try {
         if (fs.existsSync(mockDbPath)) {

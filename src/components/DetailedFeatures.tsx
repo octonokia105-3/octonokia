@@ -25,7 +25,7 @@ export default function DetailedFeatures() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
           className="md:col-span-2 bg-gradient-to-br from-gold/10 to-surface border border-gold/25 rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center gap-10 hover:border-gold/40 transition-colors group"
         >
           <div className="flex-1 space-y-6">
@@ -55,7 +55,7 @@ export default function DetailedFeatures() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
           className="md:col-span-2 bg-gradient-to-br from-surface to-gold/5 border border-border rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row-reverse items-center gap-10 hover:border-gold/30 transition-all shadow-xl group"
         >
           <div className="flex-1 space-y-6">
@@ -85,7 +85,7 @@ export default function DetailedFeatures() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
           className="bg-surface border border-border rounded-[32px] p-8 hover:border-gold/30 hover:-translate-y-1 transition-all shadow-xl"
         >
           <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6">
@@ -105,7 +105,7 @@ export default function DetailedFeatures() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
           className="bg-surface border border-border rounded-[32px] p-8 hover:border-gold/30 hover:-translate-y-1 transition-all shadow-xl"
         >
           <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6">
@@ -121,7 +121,7 @@ export default function DetailedFeatures() {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "0px" }}
           className="bg-surface border border-border rounded-[32px] p-8 hover:border-gold/30 hover:-translate-y-1 transition-all shadow-xl"
         >
           <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center text-gold mb-6">
