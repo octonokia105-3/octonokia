@@ -1,17 +1,11 @@
-import fs from 'fs'
-import path from 'path'
+import { getStoreSettings } from '@/app/actions/settings'
 
-export default function TrackingScripts() {
-  let config: any = {}
-  try {
-    const configPath = path.join(process.cwd(), 'store-config.json')
-    if (fs.existsSync(configPath)) {
-      config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
-    }
-  } catch (e) {}
-
-  const metaPixelId = config.metaPixelId
-  const tiktokPixelId = config.tiktokPixelId
+export default async function TrackingScripts() {
+  const settings = await getStoreSettings()
+  
+  const metaPixelId = settings?.meta_pixel_id
+  const tiktokPixelId = settings?.tiktok_pixel_id
+  const googleAdsId = settings?.google_ads_id
 
   return (
     <>
@@ -48,6 +42,23 @@ export default function TrackingScripts() {
             `,
           }}
         />
+      )}
+
+      {/* Google Ads */}
+      {googleAdsId && (
+        <>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`}></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${googleAdsId}');
+              `,
+            }}
+          />
+        </>
       )}
     </>
   )

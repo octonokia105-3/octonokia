@@ -31,6 +31,13 @@ export default function CheckoutForm() {
         if ((window as any).ttq) {
           (window as any).ttq.track('CompletePayment', { value: total, currency: 'MAD' });
         }
+        if ((window as any).gtag) {
+          (window as any).gtag('event', 'conversion', {
+              'send_to': 'AW-CONVERSION_ID/CONVERSION_LABEL', // User will need to configure this specifically later if they use labels
+              'value': total,
+              'currency': 'MAD'
+          });
+        }
       } catch (e) {
         console.error("Tracking Error:", e)
       }
@@ -39,25 +46,55 @@ export default function CheckoutForm() {
 
   // If successful submission, show success message
   if (state?.success) {
+    const whatsappMessage = encodeURIComponent(`مرحباً، لقد قمت بطلب العرض (${currentOffer.title}) وأريد تأكيد طلبي. رقم الطلب: #${state.orderId?.toString().substring(0,8)}`);
+    const whatsappLink = `https://wa.me/212600000000?text=${whatsappMessage}`; // We can make this dynamic later if needed
+
     return (
       <section id="checkout" className="py-24 relative z-10 bg-void overflow-hidden flex justify-center items-center">
         <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-surface-2 border border-border rounded-[2rem] p-10 shadow-2xl max-w-lg text-center"
+          initial={{ scale: 0.9, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="bg-surface-2 border-2 border-green-500/30 rounded-[2rem] p-8 md:p-12 shadow-[0_0_50px_rgba(34,197,94,0.1)] max-w-xl text-center relative overflow-hidden"
         >
-          <div className="w-20 h-20 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-10 h-10 text-success" />
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-green-600" />
+          
+          <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+            <div className="absolute inset-0 bg-green-500/20 rounded-full animate-ping" />
+            <CheckCircle2 className="w-12 h-12 text-green-500 relative z-10" />
           </div>
-          <h2 className="text-3xl font-black text-light mb-4">تم استلام طلبك بنجاح!</h2>
-          <p className="text-muted text-lg mb-8">{state.message}</p>
-          <div className="bg-void border border-border rounded-xl p-4 text-right mb-8">
-            <p className="text-light font-bold">رقم الطلب: <span className="text-gold">#{state.orderId?.toString().substring(0,8)}</span></p>
-            <p className="text-light font-bold mt-2">المبلغ الإجمالي: <span className="text-gold">{total} درهم</span></p>
+          
+          <h2 className="text-3xl md:text-4xl font-black text-light mb-4">تم استلام طلبك بنجاح!</h2>
+          <p className="text-muted text-lg mb-8 leading-relaxed">
+            شكراً لثقتك بنا. سيقوم فريقنا بالاتصال بك في أقرب وقت لتأكيد الطلب قبل الشحن.
+          </p>
+
+          <div className="bg-void border border-border rounded-2xl p-6 text-right mb-8 shadow-inner">
+            <div className="flex justify-between items-center border-b border-border/50 pb-3 mb-3">
+              <span className="text-gold font-black text-xl">#{state.orderId?.toString().substring(0,8)}</span>
+              <span className="text-muted font-bold text-sm">رقم الطلب</span>
+            </div>
+            <div className="flex justify-between items-center border-b border-border/50 pb-3 mb-3">
+              <span className="text-light font-bold">{currentOffer.title} {addBump ? '+ غلاف سيليكون' : ''}</span>
+              <span className="text-muted font-bold text-sm">المنتج</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-gold font-black text-2xl">{total} درهم</span>
+              <span className="text-muted font-bold text-sm">المجموع</span>
+            </div>
           </div>
+
+          <a 
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full mb-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-xl py-5 rounded-2xl shadow-[0_10px_30px_rgba(37,211,102,0.3)] transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
+          >
+            <span>تأكيد سريع عبر الواتساب</span>
+          </a>
+
           <button 
             onClick={() => window.location.reload()}
-            className="text-gold font-bold hover:underline"
+            className="text-muted text-sm font-bold hover:text-light transition-colors mt-4"
           >
             العودة للصفحة الرئيسية
           </button>

@@ -10,13 +10,14 @@ export default function TrackingSettings({ initialConfig }: { initialConfig: any
   const [metaPixelId, setMetaPixelId] = useState(initialConfig?.metaPixelId || '')
   const [metaCapiToken, setMetaCapiToken] = useState(initialConfig?.metaCapiToken || '')
   const [tiktokPixelId, setTiktokPixelId] = useState(initialConfig?.tiktokPixelId || '')
+  const [googleAdsId, setGoogleAdsId] = useState(initialConfig?.googleAdsId || '')
   
   const [isSaving, setIsSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
   const handleSave = async () => {
     setIsSaving(true)
-    const res = await saveTrackingConfig({ metaPixelId, metaCapiToken, tiktokPixelId })
+    const res = await saveTrackingConfig({ metaPixelId, metaCapiToken, tiktokPixelId, googleAdsId })
     setIsSaving(false)
     if (res.success) {
       setSaved(true)
@@ -76,6 +77,17 @@ export default function TrackingSettings({ initialConfig }: { initialConfig: any
             value={tiktokPixelId}
             onChange={(e) => setTiktokPixelId(e.target.value)}
             placeholder="e.g. C1234567890ABCDEF" 
+            className="w-full bg-void border border-border rounded-xl px-4 py-3 text-light focus:outline-none focus:border-blue-500 transition-colors"
+          />
+        </div>
+
+        <div className="space-y-2 pt-4 border-t border-border">
+          <label className="text-sm font-bold text-light">Google Ads Tag ID</label>
+          <input 
+            type="text" 
+            value={googleAdsId}
+            onChange={(e) => setGoogleAdsId(e.target.value)}
+            placeholder="e.g. AW-123456789" 
             className="w-full bg-void border border-border rounded-xl px-4 py-3 text-light focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>

@@ -1,43 +1,54 @@
 'use server'
 
-import fs from 'fs'
-import path from 'path'
+import { createClient } from '@/lib/supabase/server'
 
-function getConfigPath() {
-  return path.join(process.cwd(), 'store-config.json')
-}
-
-function readConfig() {
-  const configPath = getConfigPath()
-  if (fs.existsSync(configPath)) {
-    return JSON.parse(fs.readFileSync(configPath, 'utf8'))
+export async function getStoreSettings() {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('store_settings')
+      .select('*')
+      .eq('id', 1)
+      .single()
+      
+    if (error && error.code !== 'PGRST116') {
+      console.error("Error fetching settings:", error)
+      return null
+    }
+    return data
+  } catch (err) {
+    return null
   }
-  return {}
-}
-
-function writeConfig(config: any) {
-  const configPath = getConfigPath()
-  fs.writeFileSync(configPath, JSON.stringify(config, null, 2))
 }
 
 export async function saveGoogleSheetsWebhook(url: string) {
   try {
-    const config = readConfig()
-    config.googleSheetsWebhookUrl = url
-    writeConfig(config)
+    const supabase = await createClient()
+    const { error } = await supabase
+      .from('store_settings')
+      .upsert({ id: 1, google_sheets_webhook_url: url })
+      
+    if (error) throw error
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message }
   }
 }
 
-export async function saveTrackingConfig(data: { metaPixelId?: string; metaCapiToken?: string; tiktokPixelId?: string }) {
+export async function saveTrackingConfig(data: { metaPixelId?: string; metaCapiToken?: string; tiktokPixelId?: string; googleAdsId?: string }) {
   try {
-    const config = readConfig()
-    config.metaPixelId = data.metaPixelId || ''
-    config.metaCapiToken = data.metaCapiToken || ''
-    config.tiktokPixelId = data.tiktokPixelId || ''
-    writeConfig(config)
+    const supabase = await createClient()
+    const { error } = await supabase
+      .from('store_settings')
+      .upsert({ 
+        id: 1, 
+        meta_pixel_id: data.metaPixelId || '',
+        meta_capi_token: data.metaCapiToken || '',
+        tiktok_pixel_id: data.tiktokPixelId || '',
+        google_ads_id: data.googleAdsId || ''
+      })
+      
+    if (error) throw error
     return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message }
