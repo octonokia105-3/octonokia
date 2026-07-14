@@ -1,64 +1,33 @@
-import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+  let response = NextResponse.next({
     request,
   })
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  // PREVIEW MODE: If keys are missing, allow full access to view the UI design!
-  if (!supabaseUrl || !supabaseKey) {
-    return supabaseResponse
-  }
-
   try {
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabaseKey,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll()
-          },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
-            supabaseResponse = NextResponse.next({
-              request,
-            })
-            cookiesToSet.forEach(({ name, value, options }) =>
-              supabaseResponse.cookies.set(name, value, options)
-            )
-          },
-        },
-      }
-    )
+    const isAuthenticated = request.cookies.get('admin-auth')?.value === 'true'
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    // Protect all /admin routes
-    if (request.nextUrl.pathname.startsWith('/admin') && !request.nextUrl.pathname.startsWith('/admin/login')) {
-      if (!user) {
+    // Protect all /adminpage routes except login
+    if (request.nextUrl.pathname.startsWith('/adminpage') && !request.nextUrl.pathname.startsWith('/adminpage/login')) {
+      if (!isAuthenticated) {
         const url = request.nextUrl.clone()
-        url.pathname = '/admin/login'
+        url.pathname = '/adminpage/login'
         return NextResponse.redirect(url)
       }
     }
 
-    if (request.nextUrl.pathname === '/admin/login' && user) {
+    // Redirect to /adminpage if already logged in and visiting login page
+    if (request.nextUrl.pathname === '/adminpage/login' && isAuthenticated) {
       const url = request.nextUrl.clone()
-      url.pathname = '/admin'
+      url.pathname = '/adminpage'
       return NextResponse.redirect(url)
     }
   } catch (err) {
-    console.error("Middleware Supabase Error:", err)
+    console.error("Middleware Error:", err)
   }
 
-  return supabaseResponse
+  return response
 }
 
 export const config = {

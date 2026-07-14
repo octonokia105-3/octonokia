@@ -1,6 +1,6 @@
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+// Removed Supabase client import
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { LayoutDashboard, ShoppingBag, PhoneCall, Users, BarChart3, Settings, LogOut, Globe } from 'lucide-react'
@@ -11,9 +11,8 @@ function SidebarContent() {
   const router = useRouter()
   
   const handleSignOut = async () => {
-    const sb = createClient()
-    await sb.auth.signOut()
-    router.push('/admin/login')
+    document.cookie = "admin-auth=; Max-Age=0; path=/;"
+    router.push('/adminpage/login')
   }
 
   return (
@@ -28,12 +27,12 @@ function SidebarContent() {
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
-        <NavLink href="/admin" icon={<LayoutDashboard className="w-5 h-5" />} label={t.sidebar.overview} />
-        <NavLink href="/admin/orders" icon={<ShoppingBag className="w-5 h-5" />} label={t.sidebar.orders} />
-        <NavLink href="/admin/call-center" icon={<PhoneCall className="w-5 h-5" />} label={t.sidebar.callCenter} />
-        <NavLink href="/admin/customers" icon={<Users className="w-5 h-5" />} label={t.sidebar.customers} />
-        <NavLink href="/admin/analytics" icon={<BarChart3 className="w-5 h-5" />} label={t.sidebar.analytics} />
-        <NavLink href="/admin/settings" icon={<Settings className="w-5 h-5" />} label={t.sidebar.settings} />
+        <NavLink href="/adminpage" icon={<LayoutDashboard className="w-5 h-5" />} label={t.sidebar.overview} />
+        <NavLink href="/adminpage/orders" icon={<ShoppingBag className="w-5 h-5" />} label={t.sidebar.orders} />
+        <NavLink href="/adminpage/call-center" icon={<PhoneCall className="w-5 h-5" />} label={t.sidebar.callCenter} />
+        <NavLink href="/adminpage/customers" icon={<Users className="w-5 h-5" />} label={t.sidebar.customers} />
+        <NavLink href="/adminpage/analytics" icon={<BarChart3 className="w-5 h-5" />} label={t.sidebar.analytics} />
+        <NavLink href="/adminpage/settings" icon={<Settings className="w-5 h-5" />} label={t.sidebar.settings} />
       </nav>
 
       <div className="p-4 border-t border-border space-y-2">

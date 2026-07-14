@@ -1,31 +1,34 @@
-import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export default async function LoginPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const cookieStore = await cookies()
+  const isAuthenticated = cookieStore.get('admin-auth')
 
-  if (user) {
-    redirect('/admin')
+  if (isAuthenticated?.value === 'true') {
+    redirect('/adminpage')
   }
 
   // Server Action for logging in
   async function login(formData: FormData) {
     'use server'
-    const email = formData.get('email') as string
+    const username = formData.get('username') as string
     const password = formData.get('password') as string
     
-    const supabase = await createClient()
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      redirect('/admin/login?error=Invalid credentials')
+    // Hardcoded credentials as requested
+    if (username === 'admin' && password === 'Hamza@1994') {
+      const cookieStore = await cookies()
+      cookieStore.set('admin-auth', 'true', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7 // 1 week
+      })
+      redirect('/adminpage')
+    } else {
+      redirect('/adminpage/login?error=Invalid credentials')
     }
-    
-    redirect('/admin')
   }
 
   return (
@@ -36,15 +39,16 @@ export default async function LoginPage() {
             <span className="text-gold font-black text-2xl">A</span>
           </div>
           <h1 className="text-2xl font-black text-light">Admin Dashboard</h1>
-          <p className="text-muted mt-2 text-sm">Sign in to manage your COD operations</p>
+          <p className="text-muted mt-2 text-sm">Sign in with your admin credentials</p>
         </div>
 
         <form action={login} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-light mb-1">Email Address</label>
+            <label className="block text-sm font-bold text-light mb-1">Username</label>
             <input 
-              type="email" 
-              name="email"
+              type="text" 
+              name="username"
+              placeholder="admin"
               required 
               className="w-full bg-void border border-border rounded-xl px-4 py-3 text-light focus:outline-none focus:border-gold transition-colors"
             />
@@ -54,6 +58,7 @@ export default async function LoginPage() {
             <input 
               type="password" 
               name="password"
+              placeholder="••••••••"
               required 
               className="w-full bg-void border border-border rounded-xl px-4 py-3 text-light focus:outline-none focus:border-gold transition-colors"
             />
