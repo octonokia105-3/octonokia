@@ -198,43 +198,41 @@ export async function submitOrder(prevState: any, formData: FormData) {
 
 async function triggerMetaCAPI(phone: string, fullName: string, city: string, totalAmount: number, clientIp: string, clientUserAgent: string) {
   try {
-    const configPath = path.join(process.cwd(), 'store-config.json')
-    if (fs.existsSync(configPath)) {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'))
-      
-      if (config.metaPixelId && config.metaCapiToken) {
-        const eventData = {
-          data: [
-            {
-              event_name: 'Purchase',
-              event_time: Math.floor(Date.now() / 1000),
-              action_source: 'website',
-              user_data: {
-                client_ip_address: clientIp,
-                client_user_agent: clientUserAgent,
-                ph: [crypto.createHash('sha256').update(phone).digest('hex')],
-                fn: [crypto.createHash('sha256').update(fullName.split(' ')[0] || fullName).digest('hex')],
-                ct: [crypto.createHash('sha256').update(city).digest('hex')],
-                country: [crypto.createHash('sha256').update('ma').digest('hex')]
-              },
-              custom_data: {
-                value: totalAmount,
-                currency: 'MAD'
-              }
+    const { getStoreSettings } = await import('@/app/actions/settings');
+    const settings = await getStoreSettings();
+    
+    if (settings && settings.meta_pixel_id && settings.meta_capi_token) {
+      const eventData = {
+        data: [
+          {
+            event_name: 'Purchase',
+            event_time: Math.floor(Date.now() / 1000),
+            action_source: 'website',
+            user_data: {
+              client_ip_address: clientIp,
+              client_user_agent: clientUserAgent,
+              ph: [crypto.createHash('sha256').update(phone).digest('hex')],
+              fn: [crypto.createHash('sha256').update(fullName.split(' ')[0] || fullName).digest('hex')],
+              ct: [crypto.createHash('sha256').update(city).digest('hex')],
+              country: [crypto.createHash('sha256').update('ma').digest('hex')]
+            },
+            custom_data: {
+              value: totalAmount,
+              currency: 'MAD'
             }
-          ]
-        }
-
-        const capiUrl = `https://graph.facebook.com/v19.0/${config.metaPixelId}/events?access_token=${config.metaCapiToken}`
-        
-        fetch(capiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(eventData)
-        }).then(res => res.json()).then(res => {
-          if (res.error) console.error("Meta CAPI Error:", res.error)
-        }).catch(e => console.error("Meta CAPI Fetch Failed:", e))
+          }
+        ]
       }
+
+      const capiUrl = `https://graph.facebook.com/v19.0/${settings.meta_pixel_id}/events?access_token=${settings.meta_capi_token}`
+      
+      fetch(capiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventData)
+      }).then(res => res.json()).then(res => {
+        if (res.error) console.error("Meta CAPI Error:", res.error)
+      }).catch(e => console.error("Meta CAPI Fetch Failed:", e))
     }
   } catch (e) {
     console.error("CAPI Implementation Error:", e)
